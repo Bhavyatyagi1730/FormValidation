@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>REGISTRATION FORM</h2>
+        </div>
+        <form  class="form" id="form">
+            <div class="form-control">
+                <label>Username</label>
+                <input type="text" name="" id="username" placeholder="Enter Your Full Name" autocomplete="off">
+                <i class="fa-solid fa-circle-check"></i>
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <small>Error Msg</small>
+            </div>
+            <div class="form-control">
+                <label>Email</label>
+                <input type="email" name="" id="email" placeholder="Enter Your Full Email" autocomplete="off">
+                <i class="fa-solid fa-circle-check"></i>
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <small>Error Msg</small>
+            </div>
+            <div class="form-control">
+                <label>Phone Number</label>
+                <input type="text" name="" id="phone" placeholder="Enter Your Phone Number" autocomplete="off">
+                <i class="fa-solid fa-circle-check"></i>
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <small>Error Msg</small>
+            </div>
+            <div class="form-control">
+                <label>Password</label>
+                <input type="Password" name="" id="password" placeholder="Enter Your Password" autocomplete="off">
+                <i class="fa-solid fa-circle-check"></i>
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <small>Error Msg</small>
+            </div>
+            <div class="form-control">
+                <label>Confirm Password</label>
+                <input type="Password" name="" id="cpassword" placeholder="Enter Your Password" autocomplete="off">
+                <i class="fa-solid fa-circle-check"></i>
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <small>Error Msg</small>
+            </div>
+            <input type="submit" value="submit" class="btn" name="">
+        </form>
+    </div>
+    
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript">
+        const form = document.getElementById('form');
+const username = document.getElementById('username');
+const email = document.getElementById('email');
+const phone = document.getElementById('phone');
+const password = document.getElementById('password');
+const cpassword = document.getElementById('cpassword');
+
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    validate();
+})
+const sendData = (usernameVal, sRate, count) => {
+    if(sRate === count){
+        alert('Registration Successful');
+        swal("Welcome! " + usernameVal , "Registration Successful" , "success");
+    location.href = `demo.html?username=${usernameVal}`
+    }
+}
+
+const successMsg = (usernameVal) => {
+    let formCon = document.getElementsByClassName('form-control');
+    var count = formCon.length - 1;
+    for(var i =0; i< formCon.length; i++){
+        if(formCon[i].className === "form-control success"){
+            var sRate = 0 + i;
+            console.log(sRate);
+            sendData(usernameVal,sRate, count);
+        } else {
+            return false;
+        }
+    }
+}
+
+
+
+// email meri kha se start h kha se mhi then check
+const isEmail = (emailVal) => {
+    var atSymbol = emailVal.IndexOf("@");
+    if(atSymbol < 1) return false;
+    var dot = emailVal.lastIndexOf('.');
+    if(dot <= atSymbol + 2) return false;
+    if(dot === emailVal.length - 1) return false;
+    return true;
+}
+// white space khtm k lie function
+const validate = () => {
+    const usernameVal = document.value.trim();
+    const emailVal = document.value.trim();
+    const phoneVal = document.value.trim();
+    const passwordVal = document.value.trim();
+    const cpasswordVal = document.value.trim();
+
+    // validate username
+    if(usernameVal === ""){
+       setErrorMsg(username, 'username cannot be blank');
+    }
+    else if(usernameVal.length <= 2){
+       setErrorMsg(username, 'username min 3 char');
+    } else {
+        setSuccessMsg(username);
+    }
+
+    // validate Email
+    if(emailVal === ""){
+       setErrorMsg(email, 'email cannot be blank');
+    }
+    else if(!isEmail(emailVal)){
+       setErrorMsg(email, 'Not a valid email');
+    } else {
+        setSuccessMsg(email);
+    }
+// validate phone
+    if(phoneVal === ""){
+        setErrorMsg(phone, 'phone cannot be blank');
+     }
+     else if(phoneVal.length != 10){
+        setErrorMsg(phoneVal, 'Not a valid Phonr Number');
+     } else {
+         setSuccessMsg(phone);
+     }
+     //password
+     if(passwordVal === ""){
+        setErrorMsg(password, 'phone cannot be blank');
+     }
+     else if(passwordVal.length <= 5){
+        setErrorMsg(password, 'Not a valid Phonr Number');
+     } else {
+         setSuccessMsg(password);
+     }
+// cpassword
+     if(cpasswordVal === ""){
+        setErrorMsg(cpassword, 'phone cannot be blank');
+     }
+     else if(passwordVal != cpasswordVal){
+        setErrorMsg(cpassword, 'Not a valid Phonr Number');
+     } else {
+         setSuccessMsg(cpassword);
+     }
+     successMsg(usernameVal);
+}
+// parent dekhne k liye ki usne konsa input kiya hai phele ya nhi fir uske badh 
+// class formcontrol m jayega then error them form-control error css me fir uske text ko show krega then uske color border ko
+function setErrorMsg(input, errormsgs){
+    const formControl = input.parentElement;
+    const small = formControl.querySelector('small');
+    formControl.className = "form-control error";
+    small.innerText = errormsgs;
+}
+// success class jb input m add hogi tb border green ho jayega then success class ka symbol visible hoga f=grrn ho jayega
+function setSuccessMsg(input){
+    const formControl = input.parentElement;
+    formControl.className = "form-control success";
+}
+    </script>
+</body>
+</html>
